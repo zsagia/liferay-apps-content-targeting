@@ -3,6 +3,14 @@
 
 <liferay-portlet-app>
 	<portlet>
+		<portlet-name>abtesting</portlet-name>
+		<icon>/icons/ab_testing.png</icon>
+		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
+		<instanceable>true</instanceable>
+		<render-weight>1</render-weight>
+		<css-class-wrapper>ab-testing-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
 		<portlet-name>campaigncontentdisplay</portlet-name>
 		<icon>/icons/campaign_content_display.png</icon>
 		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
