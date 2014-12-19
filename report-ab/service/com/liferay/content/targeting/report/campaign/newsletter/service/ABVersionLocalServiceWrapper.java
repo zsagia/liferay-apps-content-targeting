@@ -286,6 +286,15 @@ public class ABVersionLocalServiceWrapper implements ABVersionLocalService,
 			arguments);
 	}
 
+	@Override
+	public com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion addABversion(
+		long campaignId, java.lang.String alias, int viewsCount, int goalCount)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _abVersionLocalService.addABversion(campaignId, alias,
+			viewsCount, goalCount);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

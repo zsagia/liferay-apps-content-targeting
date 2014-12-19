@@ -29,5 +29,10 @@
 		<finder name="CampaignId" return-type="Collection">
 			<finder-column name="campaignId"/>
 		</finder>
+
+		<finder name="C_D" return-type="ABVersion" unique="true">
+			<finder-column name="campaignId"/>
+			<finder-column name="alias"/>
+		</finder>
 	</entity>
 </service-builder>

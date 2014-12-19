@@ -88,8 +88,9 @@ public class ABVersionModelImpl extends BaseModelImpl<ABVersion>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion"),
 			true);
-	public static long CAMPAIGNID_COLUMN_BITMASK = 1L;
-	public static long MODIFIEDDATE_COLUMN_BITMASK = 2L;
+	public static long ALIAS_COLUMN_BITMASK = 1L;
+	public static long CAMPAIGNID_COLUMN_BITMASK = 2L;
+	public static long MODIFIEDDATE_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -270,7 +271,17 @@ public class ABVersionModelImpl extends BaseModelImpl<ABVersion>
 
 	@Override
 	public void setAlias(String alias) {
+		_columnBitmask |= ALIAS_COLUMN_BITMASK;
+
+		if (_originalAlias == null) {
+			_originalAlias = _alias;
+		}
+
 		_alias = alias;
+	}
+
+	public String getOriginalAlias() {
+		return GetterUtil.getString(_originalAlias);
 	}
 
 	@JSON
@@ -402,6 +413,8 @@ public class ABVersionModelImpl extends BaseModelImpl<ABVersion>
 
 		abVersionModelImpl._setOriginalCampaignId = false;
 
+		abVersionModelImpl._originalAlias = abVersionModelImpl._alias;
+
 		abVersionModelImpl._columnBitmask = 0;
 	}
 
@@ -506,6 +519,7 @@ public class ABVersionModelImpl extends BaseModelImpl<ABVersion>
 	private long _originalCampaignId;
 	private boolean _setOriginalCampaignId;
 	private String _alias;
+	private String _originalAlias;
 	private int _viewsCount;
 	private int _goalCount;
 	private Date _modifiedDate;

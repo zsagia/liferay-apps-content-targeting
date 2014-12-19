@@ -275,6 +275,14 @@ public class ABVersionLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion addABversion(
+		long campaignId, java.lang.String alias, int viewsCount, int goalCount)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addABversion(campaignId, alias, viewsCount, goalCount);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

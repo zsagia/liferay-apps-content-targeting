@@ -276,6 +276,79 @@ public class ABVersionUtil {
 	}
 
 	/**
+	* Returns the a b version where campaignId = &#63; and alias = &#63; or throws a {@link com.liferay.content.targeting.report.campaign.newsletter.NoSuchABVersionException} if it could not be found.
+	*
+	* @param campaignId the campaign ID
+	* @param alias the alias
+	* @return the matching a b version
+	* @throws com.liferay.content.targeting.report.campaign.newsletter.NoSuchABVersionException if a matching a b version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion findByC_D(
+		long campaignId, java.lang.String alias)
+		throws com.liferay.content.targeting.report.campaign.newsletter.NoSuchABVersionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByC_D(campaignId, alias);
+	}
+
+	/**
+	* Returns the a b version where campaignId = &#63; and alias = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param campaignId the campaign ID
+	* @param alias the alias
+	* @return the matching a b version, or <code>null</code> if a matching a b version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion fetchByC_D(
+		long campaignId, java.lang.String alias)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_D(campaignId, alias);
+	}
+
+	/**
+	* Returns the a b version where campaignId = &#63; and alias = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param campaignId the campaign ID
+	* @param alias the alias
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching a b version, or <code>null</code> if a matching a b version could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion fetchByC_D(
+		long campaignId, java.lang.String alias, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByC_D(campaignId, alias, retrieveFromCache);
+	}
+
+	/**
+	* Removes the a b version where campaignId = &#63; and alias = &#63; from the database.
+	*
+	* @param campaignId the campaign ID
+	* @param alias the alias
+	* @return the a b version that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion removeByC_D(
+		long campaignId, java.lang.String alias)
+		throws com.liferay.content.targeting.report.campaign.newsletter.NoSuchABVersionException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByC_D(campaignId, alias);
+	}
+
+	/**
+	* Returns the number of a b versions where campaignId = &#63; and alias = &#63;.
+	*
+	* @param campaignId the campaign ID
+	* @param alias the alias
+	* @return the number of matching a b versions
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_D(long campaignId, java.lang.String alias)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_D(campaignId, alias);
+	}
+
+	/**
 	* Caches the a b version in the entity cache if it is enabled.
 	*
 	* @param abVersion the a b version

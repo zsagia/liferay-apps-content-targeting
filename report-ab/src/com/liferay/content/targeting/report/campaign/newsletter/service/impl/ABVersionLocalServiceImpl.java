@@ -14,7 +14,13 @@
 
 package com.liferay.content.targeting.report.campaign.newsletter.service.impl;
 
+import com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion;
 import com.liferay.content.targeting.report.campaign.newsletter.service.base.ABVersionLocalServiceBaseImpl;
+import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+
+import java.util.Date;
 
 /**
  * The implementation of the a b version local service.
@@ -36,4 +42,31 @@ public class ABVersionLocalServiceImpl extends ABVersionLocalServiceBaseImpl {
 	 *
 	 * Never reference this interface directly. Always use {@link com.liferay.content.targeting.report.campaign.newsletter.service.ABVersionLocalServiceUtil} to access the a b version local service.
 	 */
+
+	@Override
+	public ABVersion addABversion(
+			long campaignId, String alias, int viewsCount, int goalCount)
+		throws PortalException, SystemException {
+
+		ABVersion abVersion = abVersionPersistence.fetchByC_D(campaignId, alias);
+
+		if (abVersion == null) {
+			long abVersionId = CounterLocalServiceUtil.increment();
+
+			abVersion = abVersionPersistence.create(abVersionId);
+
+			abVersion.setCampaignId(campaignId);
+			abVersion.setAlias(alias);
+		}
+
+		abVersion.setViewsCount(
+			abVersion.getViewsCount() + viewsCount);
+		abVersion.setGoalCount(
+			abVersion.getGoalCount() + goalCount);
+		abVersion.setModifiedDate(new Date());
+
+		abVersionPersistence.update(abVersion);
+
+		return abVersion;
+	}
 }

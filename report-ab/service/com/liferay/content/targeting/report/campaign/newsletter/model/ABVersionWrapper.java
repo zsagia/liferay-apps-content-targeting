@@ -302,7 +302,8 @@ public class ABVersionWrapper implements ABVersion, ModelWrapper<ABVersion> {
 	}
 
 	@Override
-	public int compareTo(ABVersion abVersion) {
+	public int compareTo(
+		com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion abVersion) {
 		return _abVersion.compareTo(abVersion);
 	}
 
@@ -312,17 +313,17 @@ public class ABVersionWrapper implements ABVersion, ModelWrapper<ABVersion> {
 	}
 
 	@Override
-	public com.liferay.portal.model.CacheModel<ABVersion> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion> toCacheModel() {
 		return _abVersion.toCacheModel();
 	}
 
 	@Override
-	public ABVersion toEscapedModel() {
+	public com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion toEscapedModel() {
 		return new ABVersionWrapper(_abVersion.toEscapedModel());
 	}
 
 	@Override
-	public ABVersion toUnescapedModel() {
+	public com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion toUnescapedModel() {
 		return new ABVersionWrapper(_abVersion.toUnescapedModel());
 	}
 

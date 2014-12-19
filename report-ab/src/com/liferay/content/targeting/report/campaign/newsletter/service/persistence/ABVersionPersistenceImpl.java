@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -577,6 +578,269 @@ public class ABVersionPersistenceImpl extends BasePersistenceImpl<ABVersion>
 	}
 
 	private static final String _FINDER_COLUMN_CAMPAIGNID_CAMPAIGNID_2 = "abVersion.campaignId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_C_D = new FinderPath(ABVersionModelImpl.ENTITY_CACHE_ENABLED,
+			ABVersionModelImpl.FINDER_CACHE_ENABLED, ABVersionImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByC_D",
+			new String[] { Long.class.getName(), String.class.getName() },
+			ABVersionModelImpl.CAMPAIGNID_COLUMN_BITMASK |
+			ABVersionModelImpl.ALIAS_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_D = new FinderPath(ABVersionModelImpl.ENTITY_CACHE_ENABLED,
+			ABVersionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_D",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
+	 * Returns the a b version where campaignId = &#63; and alias = &#63; or throws a {@link com.liferay.content.targeting.report.campaign.newsletter.NoSuchABVersionException} if it could not be found.
+	 *
+	 * @param campaignId the campaign ID
+	 * @param alias the alias
+	 * @return the matching a b version
+	 * @throws com.liferay.content.targeting.report.campaign.newsletter.NoSuchABVersionException if a matching a b version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ABVersion findByC_D(long campaignId, String alias)
+		throws NoSuchABVersionException, SystemException {
+		ABVersion abVersion = fetchByC_D(campaignId, alias);
+
+		if (abVersion == null) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("campaignId=");
+			msg.append(campaignId);
+
+			msg.append(", alias=");
+			msg.append(alias);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchABVersionException(msg.toString());
+		}
+
+		return abVersion;
+	}
+
+	/**
+	 * Returns the a b version where campaignId = &#63; and alias = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param campaignId the campaign ID
+	 * @param alias the alias
+	 * @return the matching a b version, or <code>null</code> if a matching a b version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ABVersion fetchByC_D(long campaignId, String alias)
+		throws SystemException {
+		return fetchByC_D(campaignId, alias, true);
+	}
+
+	/**
+	 * Returns the a b version where campaignId = &#63; and alias = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param campaignId the campaign ID
+	 * @param alias the alias
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching a b version, or <code>null</code> if a matching a b version could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ABVersion fetchByC_D(long campaignId, String alias,
+		boolean retrieveFromCache) throws SystemException {
+		Object[] finderArgs = new Object[] { campaignId, alias };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_D,
+					finderArgs, this);
+		}
+
+		if (result instanceof ABVersion) {
+			ABVersion abVersion = (ABVersion)result;
+
+			if ((campaignId != abVersion.getCampaignId()) ||
+					!Validator.equals(alias, abVersion.getAlias())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_SELECT_ABVERSION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_D_CAMPAIGNID_2);
+
+			boolean bindAlias = false;
+
+			if (alias == null) {
+				query.append(_FINDER_COLUMN_C_D_ALIAS_1);
+			}
+			else if (alias.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_D_ALIAS_3);
+			}
+			else {
+				bindAlias = true;
+
+				query.append(_FINDER_COLUMN_C_D_ALIAS_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(campaignId);
+
+				if (bindAlias) {
+					qPos.add(alias);
+				}
+
+				List<ABVersion> list = q.list();
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_D,
+						finderArgs, list);
+				}
+				else {
+					ABVersion abVersion = list.get(0);
+
+					result = abVersion;
+
+					cacheResult(abVersion);
+
+					if ((abVersion.getCampaignId() != campaignId) ||
+							(abVersion.getAlias() == null) ||
+							!abVersion.getAlias().equals(alias)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_D,
+							finderArgs, abVersion);
+					}
+				}
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_D,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (ABVersion)result;
+		}
+	}
+
+	/**
+	 * Removes the a b version where campaignId = &#63; and alias = &#63; from the database.
+	 *
+	 * @param campaignId the campaign ID
+	 * @param alias the alias
+	 * @return the a b version that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public ABVersion removeByC_D(long campaignId, String alias)
+		throws NoSuchABVersionException, SystemException {
+		ABVersion abVersion = findByC_D(campaignId, alias);
+
+		return remove(abVersion);
+	}
+
+	/**
+	 * Returns the number of a b versions where campaignId = &#63; and alias = &#63;.
+	 *
+	 * @param campaignId the campaign ID
+	 * @param alias the alias
+	 * @return the number of matching a b versions
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public int countByC_D(long campaignId, String alias)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_D;
+
+		Object[] finderArgs = new Object[] { campaignId, alias };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_ABVERSION_WHERE);
+
+			query.append(_FINDER_COLUMN_C_D_CAMPAIGNID_2);
+
+			boolean bindAlias = false;
+
+			if (alias == null) {
+				query.append(_FINDER_COLUMN_C_D_ALIAS_1);
+			}
+			else if (alias.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_C_D_ALIAS_3);
+			}
+			else {
+				bindAlias = true;
+
+				query.append(_FINDER_COLUMN_C_D_ALIAS_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(campaignId);
+
+				if (bindAlias) {
+					qPos.add(alias);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_D_CAMPAIGNID_2 = "abVersion.campaignId = ? AND ";
+	private static final String _FINDER_COLUMN_C_D_ALIAS_1 = "abVersion.alias IS NULL";
+	private static final String _FINDER_COLUMN_C_D_ALIAS_2 = "abVersion.alias = ?";
+	private static final String _FINDER_COLUMN_C_D_ALIAS_3 = "(abVersion.alias IS NULL OR abVersion.alias = '')";
 
 	public ABVersionPersistenceImpl() {
 		setModelClass(ABVersion.class);
@@ -591,6 +855,10 @@ public class ABVersionPersistenceImpl extends BasePersistenceImpl<ABVersion>
 	public void cacheResult(ABVersion abVersion) {
 		EntityCacheUtil.putResult(ABVersionModelImpl.ENTITY_CACHE_ENABLED,
 			ABVersionImpl.class, abVersion.getPrimaryKey(), abVersion);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_D,
+			new Object[] { abVersion.getCampaignId(), abVersion.getAlias() },
+			abVersion);
 
 		abVersion.resetOriginalValues();
 	}
@@ -648,6 +916,8 @@ public class ABVersionPersistenceImpl extends BasePersistenceImpl<ABVersion>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(abVersion);
 	}
 
 	@Override
@@ -658,6 +928,57 @@ public class ABVersionPersistenceImpl extends BasePersistenceImpl<ABVersion>
 		for (ABVersion abVersion : abVersions) {
 			EntityCacheUtil.removeResult(ABVersionModelImpl.ENTITY_CACHE_ENABLED,
 				ABVersionImpl.class, abVersion.getPrimaryKey());
+
+			clearUniqueFindersCache(abVersion);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(ABVersion abVersion) {
+		if (abVersion.isNew()) {
+			Object[] args = new Object[] {
+					abVersion.getCampaignId(), abVersion.getAlias()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_D, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_D, args, abVersion);
+		}
+		else {
+			ABVersionModelImpl abVersionModelImpl = (ABVersionModelImpl)abVersion;
+
+			if ((abVersionModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_C_D.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						abVersion.getCampaignId(), abVersion.getAlias()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_D, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_D, args,
+					abVersion);
+			}
+		}
+	}
+
+	protected void clearUniqueFindersCache(ABVersion abVersion) {
+		ABVersionModelImpl abVersionModelImpl = (ABVersionModelImpl)abVersion;
+
+		Object[] args = new Object[] {
+				abVersion.getCampaignId(), abVersion.getAlias()
+			};
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_D, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_D, args);
+
+		if ((abVersionModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_C_D.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					abVersionModelImpl.getOriginalCampaignId(),
+					abVersionModelImpl.getOriginalAlias()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_D, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_D, args);
 		}
 	}
 
@@ -825,6 +1146,9 @@ public class ABVersionPersistenceImpl extends BasePersistenceImpl<ABVersion>
 
 		EntityCacheUtil.putResult(ABVersionModelImpl.ENTITY_CACHE_ENABLED,
 			ABVersionImpl.class, abVersion.getPrimaryKey(), abVersion);
+
+		clearUniqueFindersCache(abVersion);
+		cacheUniqueFindersCache(abVersion);
 
 		return abVersion;
 	}

@@ -113,6 +113,12 @@ public class ABVersionLocalServiceClpInvoker {
 		_methodName35 = "setBeanIdentifier";
 
 		_methodParameterTypes35 = new String[] { "java.lang.String" };
+
+		_methodName40 = "addABversion";
+
+		_methodParameterTypes40 = new String[] {
+				"long", "java.lang.String", "int", "int"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -216,6 +222,14 @@ public class ABVersionLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName40.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes40, parameterTypes)) {
+			return ABVersionLocalServiceUtil.addABversion(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -255,4 +269,6 @@ public class ABVersionLocalServiceClpInvoker {
 	private String[] _methodParameterTypes34;
 	private String _methodName35;
 	private String[] _methodParameterTypes35;
+	private String _methodName40;
+	private String[] _methodParameterTypes40;
 }
