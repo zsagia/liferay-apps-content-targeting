@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion" />
+	<class name="com.liferay.content.targeting.report.campaign.newsletter.model.impl.ABVersionImpl" table="CT_ABReport_ABVersion">
+		<cache usage="read-write" />
+		<id name="abversionId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="campaignId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="alias" type="com.liferay.portal.dao.orm.hibernate.StringType" column="alias_" />
+		<property name="viewsCount" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="goalCount" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
+	</class>
+</hibernate-mapping>
