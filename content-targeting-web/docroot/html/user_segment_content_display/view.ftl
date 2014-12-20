@@ -48,3 +48,20 @@
 </div>
 
 <@getEditIconLinks queryRules=userSegmentQueryRules />
+
+<@liferay_portlet["renderURL"] windowState="pop_up" plid=portalUtil.getControlPanelPlid(themeDisplay.getCompanyId()) portletName="ctadmin_WAR_contenttargetingweb" varImpl="viewReportURL">
+	<@portlet["param"] name="mvcPath" value="html/content_targeting/view_report.ftl" />
+	<@portlet["param"] name="className" value="com.liferay.content.targeting.model.Campaign" />
+	<@portlet["param"] name="classPK" value="18756" />
+	<@portlet["param"] name="reportKey" value="CTActionReport" />
+</@>
+
+<span id="<@portlet["namespace"] />viewReports">
+	<@liferay_ui["icon"]
+		cssClass="lfr-icon-action lfr-icon-action-edit"
+		image="view"
+		label=true
+		message="view-report"
+		url="javascript:Liferay.Util.openWindow({dialog: {width: 960}, id:'" + renderResponse.getNamespace() + "viewReport', title: 'Reports', uri:'" + htmlUtil.escapeURL(viewReportURL.toString()) + "'});"
+	/>
+</span>
