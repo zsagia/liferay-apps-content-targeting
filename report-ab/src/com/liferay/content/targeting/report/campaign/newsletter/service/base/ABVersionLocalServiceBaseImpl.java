@@ -16,6 +16,7 @@ package com.liferay.content.targeting.report.campaign.newsletter.service.base;
 
 import com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion;
 import com.liferay.content.targeting.report.campaign.newsletter.service.ABVersionLocalService;
+import com.liferay.content.targeting.report.campaign.newsletter.service.persistence.ABVersionFinder;
 import com.liferay.content.targeting.report.campaign.newsletter.service.persistence.ABVersionPersistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -336,6 +337,24 @@ public abstract class ABVersionLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
+	 * Returns the a b version finder.
+	 *
+	 * @return the a b version finder
+	 */
+	public ABVersionFinder getABVersionFinder() {
+		return abVersionFinder;
+	}
+
+	/**
+	 * Sets the a b version finder.
+	 *
+	 * @param abVersionFinder the a b version finder
+	 */
+	public void setABVersionFinder(ABVersionFinder abVersionFinder) {
+		this.abVersionFinder = abVersionFinder;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -517,6 +536,8 @@ public abstract class ABVersionLocalServiceBaseImpl extends BaseLocalServiceImpl
 	protected com.liferay.content.targeting.report.campaign.newsletter.service.ABVersionService abVersionService;
 	@BeanReference(type = ABVersionPersistence.class)
 	protected ABVersionPersistence abVersionPersistence;
+	@BeanReference(type = ABVersionFinder.class)
+	protected ABVersionFinder abVersionFinder;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)

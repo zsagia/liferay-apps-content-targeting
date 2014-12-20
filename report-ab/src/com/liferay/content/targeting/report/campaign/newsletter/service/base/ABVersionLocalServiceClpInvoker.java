@@ -106,17 +106,17 @@ public class ABVersionLocalServiceClpInvoker {
 				"com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion"
 			};
 
-		_methodName34 = "getBeanIdentifier";
+		_methodName36 = "getBeanIdentifier";
 
-		_methodParameterTypes34 = new String[] {  };
+		_methodParameterTypes36 = new String[] {  };
 
-		_methodName35 = "setBeanIdentifier";
+		_methodName37 = "setBeanIdentifier";
 
-		_methodParameterTypes35 = new String[] { "java.lang.String" };
+		_methodParameterTypes37 = new String[] { "java.lang.String" };
 
-		_methodName40 = "addABversion";
+		_methodName42 = "addABversion";
 
-		_methodParameterTypes40 = new String[] {
+		_methodParameterTypes42 = new String[] {
 				"long", "java.lang.String", "int", "int"
 			};
 	}
@@ -210,20 +210,20 @@ public class ABVersionLocalServiceClpInvoker {
 			return ABVersionLocalServiceUtil.updateABVersion((com.liferay.content.targeting.report.campaign.newsletter.model.ABVersion)arguments[0]);
 		}
 
-		if (_methodName34.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes34, parameterTypes)) {
+		if (_methodName36.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
 			return ABVersionLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName35.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes35, parameterTypes)) {
+		if (_methodName37.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes37, parameterTypes)) {
 			ABVersionLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName40.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes40, parameterTypes)) {
+		if (_methodName42.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
 			return ABVersionLocalServiceUtil.addABversion(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				((Integer)arguments[2]).intValue(),
@@ -265,10 +265,10 @@ public class ABVersionLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName34;
-	private String[] _methodParameterTypes34;
-	private String _methodName35;
-	private String[] _methodParameterTypes35;
-	private String _methodName40;
-	private String[] _methodParameterTypes40;
+	private String _methodName36;
+	private String[] _methodParameterTypes36;
+	private String _methodName37;
+	private String[] _methodParameterTypes37;
+	private String _methodName42;
+	private String[] _methodParameterTypes42;
 }

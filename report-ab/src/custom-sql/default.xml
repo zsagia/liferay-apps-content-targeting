@@ -1,0 +1,19 @@
+<custom-sql>
+
+
+	<sql id="com.liferay.content.targeting.report.campaign.newsletter.service.persistence.findByAlias">
+		<![CDATA[
+			SELECT
+				CT_Analytics_AnalyticsEvent.className AS className, CT_Analytics_AnalyticsEvent.classPK AS classPK, CT_Analytics_AnalyticsEvent.eventType AS eventType, COUNT(*) as count
+			FROM
+				CT_Analytics_AnalyticsEvent
+			WHERE
+				(CT_Analytics_AnalyticsEvent.createDate >= ?) AND
+				(CT_Analytics_AnalyticsEvent.classPK != 0) AND
+				(CT_Analytics_AnalyticsEvent.eventType == ?) AND
+				(CT_Analytics_AnalyticsEvent.alias == ?) AND
+			GROUP BY
+				CT_Analytics_AnalyticsEvent.className, CT_Analytics_AnalyticsEvent.classPK, CT_Analytics_AnalyticsEvent.eventType
+		]]>
+	</sql>
+</custom-sql>

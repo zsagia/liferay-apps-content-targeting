@@ -4,4 +4,5 @@
 	<bean id="com.liferay.content.targeting.report.campaign.newsletter.service.ABVersionLocalService" class="com.liferay.content.targeting.report.campaign.newsletter.service.impl.ABVersionLocalServiceImpl" />
 	<bean id="com.liferay.content.targeting.report.campaign.newsletter.service.ABVersionService" class="com.liferay.content.targeting.report.campaign.newsletter.service.impl.ABVersionServiceImpl" />
 	<bean id="com.liferay.content.targeting.report.campaign.newsletter.service.persistence.ABVersionPersistence" class="com.liferay.content.targeting.report.campaign.newsletter.service.persistence.ABVersionPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.content.targeting.report.campaign.newsletter.service.persistence.ABVersionFinder" class="com.liferay.content.targeting.report.campaign.newsletter.service.persistence.ABVersionFinderImpl" parent="basePersistence" />
 </beans>
