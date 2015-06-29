@@ -124,6 +124,14 @@ public class TimeRule extends BaseRule {
 			values.get("startTimeMinute"));
 		int startTimeAmPm = GetterUtil.getInteger(values.get("startTimeAmPm"));
 
+        int startTime = startTimeAmPm*720 + startTimeHour*60 + startTimeMinute;
+        int endTime = endTimeAmPm*720 + endTimeHour*60 + endTimeMinute;
+
+        if (endTime < startTime) {
+            throw new IllegalArgumentException(
+                "end-time-must-be-greater-than-start-time");
+        }
+
 		JSONObject jsonObj = JSONFactoryUtil.createJSONObject();
 
 		jsonObj.put("endTimeHour", endTimeHour);
