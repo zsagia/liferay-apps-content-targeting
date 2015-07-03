@@ -130,16 +130,12 @@ public class ChannelInstanceLocalServiceClpInvoker {
 
 		_methodParameterTypes81 = new String[] { "java.lang.String" };
 
-		_methodName86 = "addChannelInstance";
+		_methodName87 = "addChannelInstance";
 
-		_methodParameterTypes86 = new String[] {
+		_methodParameterTypes87 = new String[] {
 				"long", "long", "java.lang.String", "long", "java.lang.String",
 				"java.lang.String", "com.liferay.portal.service.ServiceContext"
 			};
-
-		_methodName87 = "deleteChannelInstance";
-
-		_methodParameterTypes87 = new String[] { "long" };
 
 		_methodName88 = "deleteChannelInstance";
 
@@ -147,13 +143,17 @@ public class ChannelInstanceLocalServiceClpInvoker {
 				"com.liferay.content.targeting.model.ChannelInstance"
 			};
 
-		_methodName89 = "getChannelInstances";
+		_methodName89 = "deleteChannelInstance";
 
 		_methodParameterTypes89 = new String[] { "long" };
 
-		_methodName90 = "updateChannelInstance";
+		_methodName90 = "getChannelInstances";
 
-		_methodParameterTypes90 = new String[] {
+		_methodParameterTypes90 = new String[] { "long" };
+
+		_methodName91 = "updateChannelInstance";
+
+		_methodParameterTypes91 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"com.liferay.portal.service.ServiceContext"
 			};
@@ -284,19 +284,14 @@ public class ChannelInstanceLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName86.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes86, parameterTypes)) {
+		if (_methodName87.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes87, parameterTypes)) {
 			return ChannelInstanceLocalServiceUtil.addChannelInstance(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.lang.String)arguments[2],
 				((Long)arguments[3]).longValue(),
 				(java.lang.String)arguments[4], (java.lang.String)arguments[5],
 				(com.liferay.portal.service.ServiceContext)arguments[6]);
-		}
-
-		if (_methodName87.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes87, parameterTypes)) {
-			return ChannelInstanceLocalServiceUtil.deleteChannelInstance(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName88.equals(name) &&
@@ -306,11 +301,16 @@ public class ChannelInstanceLocalServiceClpInvoker {
 
 		if (_methodName89.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes89, parameterTypes)) {
-			return ChannelInstanceLocalServiceUtil.getChannelInstances(((Long)arguments[0]).longValue());
+			return ChannelInstanceLocalServiceUtil.deleteChannelInstance(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName90.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes90, parameterTypes)) {
+			return ChannelInstanceLocalServiceUtil.getChannelInstances(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName91.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes91, parameterTypes)) {
 			return ChannelInstanceLocalServiceUtil.updateChannelInstance(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(com.liferay.portal.service.ServiceContext)arguments[3]);
@@ -363,8 +363,6 @@ public class ChannelInstanceLocalServiceClpInvoker {
 	private String[] _methodParameterTypes80;
 	private String _methodName81;
 	private String[] _methodParameterTypes81;
-	private String _methodName86;
-	private String[] _methodParameterTypes86;
 	private String _methodName87;
 	private String[] _methodParameterTypes87;
 	private String _methodName88;
@@ -373,4 +371,6 @@ public class ChannelInstanceLocalServiceClpInvoker {
 	private String[] _methodParameterTypes89;
 	private String _methodName90;
 	private String[] _methodParameterTypes90;
+	private String _methodName91;
+	private String[] _methodParameterTypes91;
 }

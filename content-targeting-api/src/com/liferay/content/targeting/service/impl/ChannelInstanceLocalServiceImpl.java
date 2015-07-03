@@ -19,6 +19,7 @@ import com.liferay.content.targeting.api.model.ChannelsRegistry;
 import com.liferay.content.targeting.model.ChannelInstance;
 import com.liferay.content.targeting.service.base.ChannelInstanceLocalServiceBaseImpl;
 import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.osgi.util.service.ServiceTrackerUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -34,6 +35,9 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 
 import java.util.Date;
 import java.util.List;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 /**
  * The implementation of the channel instance local service.
@@ -52,6 +56,13 @@ import java.util.List;
 public class ChannelInstanceLocalServiceImpl
 	extends ChannelInstanceLocalServiceBaseImpl {
 
+	public ChannelInstanceLocalServiceImpl() {
+		Bundle bundle = FrameworkUtil.getBundle(getClass());
+
+		_channelsRegistry = ServiceTrackerUtil.getService(
+			ChannelsRegistry.class, bundle.getBundleContext());
+	}
+
 	@Override
 	public ChannelInstance addChannelInstance(
 			long userId, long tacticId, String channelKey, long campaignId,
@@ -65,7 +76,7 @@ public class ChannelInstanceLocalServiceImpl
 		long channelInstanceId = CounterLocalServiceUtil.increment();
 
 		ChannelInstance channelInstance = channelInstancePersistence.create(
-				channelInstanceId);
+			channelInstanceId);
 
 		channelInstance.setUuid(serviceContext.getUuid());
 		channelInstance.setGroupId(serviceContext.getScopeGroupId());
@@ -76,6 +87,7 @@ public class ChannelInstanceLocalServiceImpl
 		channelInstance.setModifiedDate(serviceContext.getModifiedDate(now));
 		channelInstance.setChannelKey(channelKey);
 		channelInstance.setCampaignId(campaignId);
+		channelInstance.setTacticId(tacticId);
 		channelInstance.setAlias(alias);
 		channelInstance.setTypeSettings(typeSettings);
 
@@ -92,15 +104,17 @@ public class ChannelInstanceLocalServiceImpl
 
 		channelInstancePersistence.remove(channelInstance);
 
+		// System event
+
 		systemEventLocalService.addSystemEvent(
-				0, channelInstance.getGroupId(),
-				ChannelInstance.class.getName(),
-				channelInstance.getChannelInstanceId(),
-				channelInstance.getUuid(), null,
-				SystemEventConstants.TYPE_DELETE, StringPool.BLANK);
+			0, channelInstance.getGroupId(), ChannelInstance.class.getName(),
+			channelInstance.getChannelInstanceId(), channelInstance.getUuid(),
+			null, SystemEventConstants.TYPE_DELETE, StringPool.BLANK);
+
+		// Channel instance data
 
 		Channel channel = _channelsRegistry.getChannel(
-				channelInstance.getChannelKey());
+			channelInstance.getChannelKey());
 
 		if (channel != null) {
 			try {
@@ -108,9 +122,9 @@ public class ChannelInstanceLocalServiceImpl
 			}
 			catch (Exception e) {
 				_log.error(
-						"Cannot delete custom data for channel " +
-								channel.getName(LocaleUtil.getDefault()),
-						e);
+					"Cannot delete custom data for channel " +
+						channel.getName(LocaleUtil.getDefault()),
+					e);
 			}
 		}
 
@@ -123,7 +137,7 @@ public class ChannelInstanceLocalServiceImpl
 		throws PortalException, SystemException {
 
 		ChannelInstance channelInstance =
-				channelInstancePersistence.findByPrimaryKey(channelInstanceId);
+			channelInstancePersistence.findByPrimaryKey(channelInstanceId);
 
 		return deleteChannelInstance(channelInstance);
 	}
@@ -144,7 +158,7 @@ public class ChannelInstanceLocalServiceImpl
 		Date now = new Date();
 
 		ChannelInstance channelInstance =
-				channelInstancePersistence.findByPrimaryKey(channelInstanceId);
+			channelInstancePersistence.findByPrimaryKey(channelInstanceId);
 
 		channelInstance.setModifiedDate(serviceContext.getModifiedDate(now));
 		channelInstance.setAlias(alias);
@@ -156,7 +170,7 @@ public class ChannelInstanceLocalServiceImpl
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
-ChannelInstanceLocalServiceImpl.class);
+		ChannelInstanceLocalServiceImpl.class);
 
 	private ChannelsRegistry _channelsRegistry;
 

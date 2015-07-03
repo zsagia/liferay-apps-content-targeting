@@ -33,6 +33,7 @@ create index IX_80BC7ACA on CT_Tactics_UserSegments (tacticId);
 create index IX_D2685D0 on CT_Tactics_UserSegments (userSegmentId);
 
 create index IX_E9845BF5 on CT_TrackingActionInstance (campaignId);
+create unique index IX_FE48A6B8 on CT_TrackingActionInstance (campaignId, alias_);
 create index IX_8DDDDC52 on CT_TrackingActionInstance (campaignId, elementId, eventType);
 create index IX_A96A17F on CT_TrackingActionInstance (campaignId, referrerClassName, referrerClassPK, eventType);
 create index IX_8EAC9E74 on CT_TrackingActionInstance (groupId);

@@ -83,11 +83,13 @@ public class TacticLocalServiceUtil {
 	*
 	* @param tactic the tactic
 	* @return the tactic that was removed
+	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
 	public static com.liferay.content.targeting.model.Tactic deleteTactic(
 		com.liferay.content.targeting.model.Tactic tactic)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return getService().deleteTactic(tactic);
 	}
 
@@ -503,19 +505,19 @@ public class TacticLocalServiceUtil {
 	}
 
 	public static com.liferay.content.targeting.util.BaseModelSearchResult<com.liferay.content.targeting.model.Tactic> searchTactics(
-		long groupId, java.lang.String keywords, int start, int end)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().searchTactics(groupId, keywords, start, end);
-	}
-
-	public static com.liferay.content.targeting.util.BaseModelSearchResult<com.liferay.content.targeting.model.Tactic> searchTactics(
 		long campaignId, long groupId, java.lang.String keywords, int start,
 		int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .searchTactics(campaignId, groupId, keywords, start, end);
+	}
+
+	public static com.liferay.content.targeting.util.BaseModelSearchResult<com.liferay.content.targeting.model.Tactic> searchTactics(
+		long groupId, java.lang.String keywords, int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().searchTactics(groupId, keywords, start, end);
 	}
 
 	public static com.liferay.content.targeting.model.Tactic updateTactic(

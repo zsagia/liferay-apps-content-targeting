@@ -14,7 +14,9 @@
 
 package com.liferay.content.targeting.service.impl;
 
+import com.liferay.content.targeting.model.ChannelInstance;
 import com.liferay.content.targeting.model.Tactic;
+import com.liferay.content.targeting.service.ChannelInstanceLocalServiceUtil;
 import com.liferay.content.targeting.service.base.TacticLocalServiceBaseImpl;
 import com.liferay.content.targeting.util.BaseModelSearchResult;
 import com.liferay.content.targeting.util.TacticUtil;
@@ -22,6 +24,8 @@ import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Hits;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
@@ -89,6 +93,29 @@ public class TacticLocalServiceImpl extends TacticLocalServiceBaseImpl {
 		return tactic;
 	}
 
+	@Indexable(type = IndexableType.DELETE)
+	@Override
+	public Tactic deleteTactic(long tacticId)
+		throws PortalException, SystemException {
+
+		for (ChannelInstance channelInstance
+			: ChannelInstanceLocalServiceUtil.getChannelInstances(tacticId)) {
+
+			ChannelInstanceLocalServiceUtil.deleteChannelInstance(
+				channelInstance.getChannelInstanceId());
+		}
+
+		return super.deleteTactic(tacticId);
+	}
+
+	@Indexable(type = IndexableType.DELETE)
+	@Override
+	public Tactic deleteTactic(Tactic tactic)
+		throws PortalException, SystemException {
+
+		return deleteTactic(tactic.getTacticId());
+	}
+
 	public List<Tactic> getResults(long campaignId, int start, int end)
 		throws PortalException, SystemException {
 
@@ -106,7 +133,7 @@ public class TacticLocalServiceImpl extends TacticLocalServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		SearchContext searchContext = buildSearchContext(
-				campaignId, groupId, keywords, start, end);
+			campaignId, groupId, keywords, start, end);
 
 		return searchTactics(searchContext);
 	}
@@ -117,7 +144,7 @@ public class TacticLocalServiceImpl extends TacticLocalServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		SearchContext searchContext = buildSearchContext(
-				groupId, keywords, start, end);
+			groupId, keywords, start, end);
 
 		return searchTactics(searchContext);
 	}
@@ -140,10 +167,28 @@ public class TacticLocalServiceImpl extends TacticLocalServiceBaseImpl {
 
 		if (userSegmentsIds != null) {
 			tacticPersistence.setUserSegments(
-					tactic.getTacticId(), userSegmentsIds);
+				tactic.getTacticId(), userSegmentsIds);
 		}
 
 		return tactic;
+	}
+
+	protected SearchContext buildSearchContext(
+			long campaignId, long groupId, String keywords, int start, int end)
+		throws PortalException, SystemException {
+
+		SearchContext searchContext = new SearchContext();
+
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		searchContext.setAttribute("campaignId", campaignId);
+		searchContext.setCompanyId(group.getCompanyId());
+		searchContext.setEnd(end);
+		searchContext.setGroupIds(new long[]{groupId});
+		searchContext.setKeywords(keywords == null ? "" : keywords);
+		searchContext.setStart(start);
+
+		return searchContext;
 	}
 
 	protected SearchContext buildSearchContext(
@@ -154,22 +199,6 @@ public class TacticLocalServiceImpl extends TacticLocalServiceBaseImpl {
 
 		Group group = GroupLocalServiceUtil.getGroup(groupId);
 
-		searchContext.setCompanyId(group.getCompanyId());
-		searchContext.setEnd(end);
-		searchContext.setGroupIds(new long[]{groupId});
-		searchContext.setKeywords(keywords == null ? "" : keywords);
-		searchContext.setStart(start);
-
-		return searchContext;
-	} protected SearchContext buildSearchContext(
-			long campaignId, long groupId, String keywords, int start, int end)
-		throws PortalException, SystemException {
-
-		SearchContext searchContext = new SearchContext();
-
-		Group group = GroupLocalServiceUtil.getGroup(groupId);
-
-		searchContext.setAttribute("campaignId", campaignId);
 		searchContext.setCompanyId(group.getCompanyId());
 		searchContext.setEnd(end);
 		searchContext.setGroupIds(new long[]{groupId});
@@ -192,12 +221,12 @@ public class TacticLocalServiceImpl extends TacticLocalServiceBaseImpl {
 
 			if ((hits != null) && (tactics != null)) {
 				return new BaseModelSearchResult<Tactic>(
-						tactics, hits.getLength());
+				tactics, hits.getLength());
 			}
 		}
 
 		throw new SearchException(
-				"Unable to fix the search index after 10 attempts");
+			"Unable to fix the search index after 10 attempts");
 	}
 
 }

@@ -39,13 +39,13 @@ public class ChannelInstanceServiceClp implements ChannelInstanceService {
 				"java.lang.String", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName4 = "getChannelInstances";
+		_methodName4 = "deleteChannelInstance";
 
-		_methodParameterTypes4 = new String[] { "long", "long" };
+		_methodParameterTypes4 = new String[] { "long" };
 
-		_methodName5 = "deleteChannelInstance";
+		_methodName5 = "getChannelInstances";
 
-		_methodParameterTypes5 = new String[] { "long" };
+		_methodParameterTypes5 = new String[] { "long", "long" };
 
 		_methodName6 = "updateChannelInstance";
 
@@ -157,6 +157,40 @@ public class ChannelInstanceServiceClp implements ChannelInstanceService {
 	}
 
 	@Override
+	public com.liferay.content.targeting.model.ChannelInstance deleteChannelInstance(
+		long channelInstanceId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableService.invokeMethod(_methodName4,
+					_methodParameterTypes4, new Object[] { channelInstanceId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.content.targeting.model.ChannelInstance)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.util.List<com.liferay.content.targeting.model.ChannelInstance> getChannelInstances(
 		long campaignId, long tacticId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -164,8 +198,8 @@ public class ChannelInstanceServiceClp implements ChannelInstanceService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableService.invokeMethod(_methodName4,
-					_methodParameterTypes4,
+			returnObj = _invokableService.invokeMethod(_methodName5,
+					_methodParameterTypes5,
 					new Object[] { campaignId, tacticId });
 		}
 		catch (Throwable t) {
@@ -189,40 +223,6 @@ public class ChannelInstanceServiceClp implements ChannelInstanceService {
 		}
 
 		return (java.util.List<com.liferay.content.targeting.model.ChannelInstance>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public com.liferay.content.targeting.model.ChannelInstance deleteChannelInstance(
-		long channelInstanceId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableService.invokeMethod(_methodName5,
-					_methodParameterTypes5, new Object[] { channelInstanceId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.content.targeting.model.ChannelInstance)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override

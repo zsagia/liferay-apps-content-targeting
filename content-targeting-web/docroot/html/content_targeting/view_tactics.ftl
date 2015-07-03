@@ -26,14 +26,9 @@
 	</@>
 </#if>
 
-<#assign titleHelp>
-    <@liferay_ui["icon-help"] message="tactics-help" />
-</#assign>
-
 <@liferay_ui["header"]
-backURL="${redirect}"
-escapeXml=false
-title="${title}${titleHelp}"
+	backURL="${redirect}"
+	title="${title}"
 />
 
 <@portlet["renderURL"] var="searchURL">
@@ -41,7 +36,7 @@ title="${title}${titleHelp}"
 	<@portlet["param"] name="campaignId" value="${campaignId}" />
 </@>
 
-<@aui["form"] action="${searchURL}" method="post" name="fmTactics">
+<@aui["form"] action="${searchURL}" method="post" name="fm">
 	<@aui["input"] name="redirect" type="hidden" value="${redirect}" />
 	<@aui["input"] name="campaignId" type="hidden" value="${campaignId}" />
 	<@aui["input"] name="tacticsIds" type="hidden" />
@@ -57,7 +52,7 @@ title="${title}${titleHelp}"
 	</@>
 
 	<div id="<@portlet["namespace"] />tacticsPanel">
-		<#include "view_tactic_resources.ftl" />
+		<#include "view_tactics_resources.ftl" />
 	</div>
 </@>
 
