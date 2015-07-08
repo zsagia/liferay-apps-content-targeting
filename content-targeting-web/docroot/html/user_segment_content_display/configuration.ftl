@@ -20,7 +20,7 @@
 	<@portlet["param"] name="redirect" value="${currentURL}" />
 </@>
 
-<@aui["form"] action="${configurationURL}" method="post" name="fm">
+<@aui["form"] action="${configurationURL}" method="post" name="fm" onSubmit="event.preventDefault();">
 	<@liferay_ui["tabs"]
 		names="content-selection,display-settings"
 		param="tabs2"
@@ -185,6 +185,49 @@
 			}
 		},
 		'.asset-selector a, .lfr-form-row'
+	);
+
+	function <@portlet["namespace"] />validateQueryRules() {
+
+		var userSegmentSelected = true;
+		var contentSelected = true;
+
+		A.all('input[id*="userSegmentAssetCategoryIds"]').each(
+			function (userSegmentIdsInput) {
+				if (!userSegmentIdsInput.get('value')) {
+					userSegmentSelected = false;
+				}
+			}
+		);
+
+		A.all('input[id*="assetEntryId"][type="hidden"]').each(
+			function (assetEntryId) {
+				if (assetEntryId.get("id").indexOf("Default") > 0) {
+					return;
+				}
+
+				if (!assetEntryId.get('value') || assetEntryId.get('value') == '0') {
+					contentSelected = false;
+				}
+			}
+		);
+
+		if (userSegmentSelected && contentSelected) {
+			submitForm(document.<@portlet["namespace"] />fm);
+		}
+		else if (!userSegmentSelected) {
+			alert('<@liferay_ui["message"] key="please-select-some-user-segment" />');
+		}
+		else if (!contentSelected) {
+			alert('<@liferay_ui["message"] key="please-select-some-content" />');
+		}
+	}
+
+	A.one('#<@portlet["namespace"] />fm').on(
+		'submit',
+		function(event) {
+			<@portlet["namespace"] />validateQueryRules();
+		}
 	);
 
 	Liferay.Util.toggleRadio('<@portlet["namespace"] />contentDefaultValueDo', '<@portlet["namespace"] />contentDefaultBox', '');
