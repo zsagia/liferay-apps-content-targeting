@@ -14,11 +14,16 @@
 
 package com.liferay.content.targeting.anonymous.users.service.impl;
 
+import com.liferay.content.targeting.anonymous.users.model.AnonymousUser;
 import com.liferay.content.targeting.anonymous.users.service.AnonymousUserLocalService;
 import com.liferay.content.targeting.service.test.service.ServiceTestUtil;
+import com.liferay.content.targeting.service.test.util.TestPropsValues;
 import com.liferay.osgi.util.service.ServiceTrackerUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceContext;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -51,18 +56,94 @@ public class AnonymousUserLocalServiceImplTest {
 	}
 
 	@Test
-	public void testAddAnonymousUser() throws Exception {
+	public void testAddAndDeleteAnonymousUser() throws Exception {
 		int initAnonymousUsersCount =
 			_anonymousUserLocalService.getAnonymousUsersCount();
 
 		ServiceContext serviceContext = ServiceTestUtil.getServiceContext();
 
-		_anonymousUserLocalService.addAnonymousUser(
+		AnonymousUser anonymousUser =
+			_anonymousUserLocalService.addAnonymousUser(
 			1, "127.0.0.1", StringPool.BLANK, serviceContext);
 
 		Assert.assertEquals(
 			initAnonymousUsersCount + 1,
 			_anonymousUserLocalService.getAnonymousUsersCount());
+
+		_anonymousUserLocalService.deleteAnonymousUser(anonymousUser);
+
+		Assert.assertEquals(
+			initAnonymousUsersCount,
+			_anonymousUserLocalService.getAnonymousUsersCount());
+	}
+
+	@Test
+	public void testAddUpdateFetchAnonymousUser() throws Exception {
+		int initAnonymousUsersCount =
+			_anonymousUserLocalService.getAnonymousUsersCount();
+
+		ServiceContext serviceContext = ServiceTestUtil.getServiceContext();
+
+		AnonymousUser anonymousUser =
+			_anonymousUserLocalService.addAnonymousUser(
+			1, "127.0.0.1", StringPool.BLANK, serviceContext);
+
+		Assert.assertEquals(
+			initAnonymousUsersCount + 1,
+			_anonymousUserLocalService.getAnonymousUsersCount());
+
+		_anonymousUserLocalService.updateAnonymousUser(
+			anonymousUser.getAnonymousUserId(), TestPropsValues.getUserId(),
+			"127.0.0.2","",serviceContext);
+
+		AnonymousUser updatedAnonymousUser =
+			_anonymousUserLocalService.fetchAnonymousUserByUserId(
+				TestPropsValues.getUserId());
+
+		Assert.assertEquals(anonymousUser, updatedAnonymousUser);
+
+		_anonymousUserLocalService.deleteAnonymousUser(anonymousUser);
+
+		Assert.assertEquals(
+			initAnonymousUsersCount,
+			_anonymousUserLocalService.getAnonymousUsersCount());
+	}
+
+	@Test
+	public void testCleanupAnonymousUser() throws Exception {
+		int initAnonymousUsersCount =
+			_anonymousUserLocalService.getAnonymousUsersCount();
+
+		ServiceContext serviceContext = ServiceTestUtil.getServiceContext();
+
+		AnonymousUser anonymousUser =
+			_anonymousUserLocalService.addAnonymousUser(
+			1, "127.0.0.1", StringPool.BLANK, serviceContext);
+
+		Assert.assertEquals(
+			initAnonymousUsersCount + 1,
+			_anonymousUserLocalService.getAnonymousUsersCount());
+
+		anonymousUser.setCreateDate(getMockCreateDate());
+
+		_anonymousUserLocalService.updateAnonymousUser(anonymousUser);
+
+		/* TODO: add cleanup call */
+	}
+
+	protected Date getMockCreateDate() {
+		Calendar calendar = Calendar.getInstance();
+
+		calendar.setTime(new Date());
+
+		int maxAge = 5;
+		/*TODO: uncomment after merge of WCM-399
+		int maxAge = PortletPropsValues.ANALYTICS_EVENTS_MAX_AGE+1;
+		*/
+
+		calendar.add(Calendar.DAY_OF_YEAR, -maxAge);
+
+		return calendar.getTime();
 	}
 
 	private AnonymousUserLocalService _anonymousUserLocalService;
