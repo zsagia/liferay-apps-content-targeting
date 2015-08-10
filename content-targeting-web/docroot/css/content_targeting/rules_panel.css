@@ -143,6 +143,7 @@
 		.asset-preview {
 			font-size: 13px;
 			overflow: hidden;
+            margin-bottom : 10px;
 
 			.asset-image {
 				max-height: 55px;

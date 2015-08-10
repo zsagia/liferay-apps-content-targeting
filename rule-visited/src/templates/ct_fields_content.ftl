@@ -26,40 +26,48 @@
 	</div>
 </#if>
 
-<div class="select-asset-selector">
-	<#assign cssClass = "">
+<@aui["layout"]>
+    <@aui["column"]>
+        <div class="rules-panel" style="background-color:transparent; margin:0px;">
+            <div class="select-asset-selector">
+                <#assign cssClass = "">
 
-	<#if (assetEntryId <= 0)>
-		<#assign cssClass = "hide">
-	</#if>
+                <#if (assetEntryId <= 0)>
+                    <#assign cssClass = "hide">
+                </#if>
 
-	<@aui["input"] name="assetEntryId" type="hidden" value=assetEntryId />
+                <@aui["input"] name="assetEntryId" type="hidden" value=assetEntryId />
 
-	<div class="asset-preview ${cssClass}" id="<@portlet["namespace"] />assetPreview">
-		<@aui["column"]>
-			<img class="asset-image" id="<@portlet["namespace"] />assetImage" src="${assetImage}" />
-		</@>
-		<@aui["column"]>
-			<div class="asset-title" id="<@portlet["namespace"] />assetTitleInfo">${assetTitle}</div>
-			<div class="asset-type" id="<@portlet["namespace"] />assetTypeInfo"><@liferay_ui["message"] key="type" />: ${assetType}</div>
-		</@>
-	</div>
+                <div class="asset-preview table ${cssClass}" id="<@portlet["namespace"] />assetPreview">
+                    <@aui["layout"]>
+                        <@aui["column"]>
+                            <img class="asset-image" id="<@portlet["namespace"] />assetImage" src="${assetImage}" />
+                        </@>
+                        <@aui["column"]>
+                            <div class="asset-title" id="<@portlet["namespace"] />assetTitleInfo">${assetTitle}</div>
+                            <div class="asset-type" id="<@portlet["namespace"] />assetTypeInfo"><@liferay_ui["message"] key="type" />: ${assetType}</div>
+                        </@>
+                    </@>
+                </div>
 
-	<div class="edit-controls lfr-meta-actions">
-		<@liferay_ui["icon-menu"] cssClass="select-existing-selector" direction="right" icon="${themeDisplay.getPathThemeImages()}/common/add.png" message=languageUtil.get(locale, "select-content") showWhenSingleIcon=true>
-			<#list assetRendererFactories as assetRendererFactory>
-				<@liferay_ui["icon"]
-					cssClass="asset-selector"
-					data=contentTargetingUtilClass.getAssetSelectorIconData(request, assetRendererFactory, '')
-					id="groupId_${assetRendererFactory.getTypeName(locale, false)}"
-					message=assetRendererFactory.getTypeName(locale, false)
-					src=assetRendererFactory.getIconPath(renderRequest)
-					url="javascript:;"
-				/>
-			</#list>
-		</@>
-	</div>
-</div>
+                <div class="edit-controls lfr-meta-actions">
+                    <@liferay_ui["icon-menu"] cssClass="select-existing-selector" direction="right" icon="${themeDisplay.getPathThemeImages()}/common/add.png" message=languageUtil.get(locale, "select-content") showWhenSingleIcon=true>
+                        <#list assetRendererFactories as assetRendererFactory>
+                            <@liferay_ui["icon"]
+                                cssClass="asset-selector"
+                                data=contentTargetingUtilClass.getAssetSelectorIconData(request, assetRendererFactory, '')
+                                id="groupId_${assetRendererFactory.getTypeName(locale, false)}"
+                                message=assetRendererFactory.getTypeName(locale, false)
+                                src=assetRendererFactory.getIconPath(renderRequest)
+                                url="javascript:;"
+                            />
+                        </#list>
+                    </@>
+                </div>
+            </div>
+        </div>
+    </@>
+</@>
 
 <@aui["script"] use="aui-base">
 	A.getBody().delegate(

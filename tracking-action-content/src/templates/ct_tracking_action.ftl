@@ -31,44 +31,50 @@
 	<@aui["validator"] name="required" />
 </@>
 
-<div class="rules-panel" style="background-color:transparent; margin:0px;">
-	<div class="control-group select-asset-selector">
-		<div class="edit-controls lfr-meta-actions">
-			<@aui["input"] name="{ct_field_guid}assetEntryId" type="hidden" value=assetEntryId />
+<@aui["layout"]>
+    <@aui["column"]>
+        <div class="rules-panel" style="background-color:transparent; margin:0px;">
+            <div class="control-group select-asset-selector">
+                <#assign cssClass = "">
 
-			<label class="control-label"><@liferay_ui["message"] key="select-the-content-to-be-tracked" /></label>
+                <#if (assetEntryId <= 0)>
+                    <#assign cssClass = "hide">
+                </#if>
 
-			<@liferay_ui["icon-menu"] cssClass="select-existing-selector" direction="right" icon="${themeDisplay.getPathThemeImages()}/common/add.png" id="{ct_field_guid}assetSelector" message=languageUtil.get(locale, "select-content") showWhenSingleIcon=true>
-				<#list assetRendererFactories as assetRendererFactory>
-					<@liferay_ui["icon"]
-						cssClass="asset-selector"
-						data=contentTargetingUtilClass.getAssetSelectorIconData(request, assetRendererFactory, '', true)
-						id="{ct_field_guid}groupId_${assetRendererFactory.getTypeName(locale, false)}"
-						message=assetRendererFactory.getTypeName(locale, false)
-						src=assetRendererFactory.getIconPath(renderRequest)
-						url="javascript:;"
-					/>
-				</#list>
-			</@>
-		</div>
+                <@aui["input"] name="{ct_field_guid}assetEntryId" type="hidden" value=assetEntryId />
 
-		<#assign cssClass = "">
+                <label class="control-label"><@liferay_ui["message"] key="select-the-content-to-be-tracked" /></label>
 
-		<#if (assetEntryId <= 0)>
-			<#assign cssClass = "hide">
-		</#if>
+                <div class="asset-preview table ${cssClass}" id="<@portlet["namespace"] />{ct_field_guid}selectedContentPreview">
+                    <@aui["layout"]>
+                        <@aui["column"]>
+                            <img class="asset-image" src="${assetImagePreview}" id="<@portlet["namespace"] />{ct_field_guid}assetImage" />
+                        </@>
+                        <@aui["column"]>
+                            <div class="asset-title" id="<@portlet["namespace"] />{ct_field_guid}assetTitlePreview">${assetTitlePreview}</div>
+                            <div class="asset-type" id="<@portlet["namespace"] />{ct_field_guid}assetTypePreview"><@liferay_ui["message"] key="type" />: ${assetTypePreview}</div>
+                        </@>
+                    </@>
+                </div>
 
-		<div class="asset-preview ${cssClass}" id="<@portlet["namespace"] />{ct_field_guid}selectedContentPreview">
-			<@aui["column"]>
-				<img class="asset-image" src="${assetImagePreview}" />
-			</@>
-			<@aui["column"]>
-				<div class="asset-title" id="<@portlet["namespace"] />{ct_field_guid}assetTitlePreview">${assetTitlePreview}</div>
-				<div class="asset-type" id="<@portlet["namespace"] />{ct_field_guid}assetTypePreview"><@liferay_ui["message"] key="type" />: ${assetTypePreview}</div>
-			</@>
-		</div>
-	</div>
-</div>
+                <div class="edit-controls lfr-meta-actions">
+                    <@liferay_ui["icon-menu"] cssClass="select-existing-selector" direction="right" icon="${themeDisplay.getPathThemeImages()}/common/add.png" id="{ct_field_guid}assetSelector" message=languageUtil.get(locale, "select-content") showWhenSingleIcon=true>
+                        <#list assetRendererFactories as assetRendererFactory>
+                            <@liferay_ui["icon"]
+                                cssClass="asset-selector"
+                                data=contentTargetingUtilClass.getAssetSelectorIconData(request, assetRendererFactory, '', true)
+                                id="_{ct_field_guid}groupId_${assetRendererFactory.getTypeName(locale, false)}"
+                                message=assetRendererFactory.getTypeName(locale, false)
+                                src=assetRendererFactory.getIconPath(renderRequest)
+                                url="javascript:;"
+                            />
+                        </#list>
+                    </@>
+                </div>
+            </div>
+        </div>
+    </@>
+</@>
 
 <#if eventTypes?has_content && (eventTypes?size > 1)>
 	<@aui["select"] label="tracking-action" name="{ct_field_guid}eventType">
@@ -81,7 +87,6 @@
 		<@aui["input"] disabled=true label="tracking-action" name="{ct_field_guid}eventType" type="text" value=curEventType />
 	</#list>
 </#if>
-
 
 <@aui["script"] use="aui-base">
 	var onAssetSelectorClick = function(event) {
@@ -100,14 +105,15 @@
 				title: currentTarget.attr('data-title'),
 				uri: currentTarget.attr('data-href')
 			},
-			function(event) {
-				A.one('#<@portlet["namespace"] />{ct_field_guid}assetEntryId').attr('value', event.assetentryid);
+            function(event) {
+                A.one('#<@portlet["namespace"] />{ct_field_guid}assetEntryId').attr('value', event.assetentryid);
+                A.one('#<@portlet["namespace"] />{ct_field_guid}assetImage').attr('src', '');
 
-				A.one('#<@portlet["namespace"] />{ct_field_guid}assetTitlePreview').html(event.assettitle);
-				A.one('#<@portlet["namespace"] />{ct_field_guid}assetTypePreview').html(event.assettype);
+                A.one('#<@portlet["namespace"] />{ct_field_guid}assetTitlePreview').html(event.assettitle);
+                A.one('#<@portlet["namespace"] />{ct_field_guid}assetTypePreview').html('<@liferay_ui["message"] key="type" />: ' + event.assettype);
 
-				A.one('#<@portlet["namespace"] />{ct_field_guid}selectedContentPreview').show();
-			}
+                A.one('#<@portlet["namespace"] />{ct_field_guid}selectedContentPreview').show();
+            }
 		);
 	};
 
