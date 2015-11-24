@@ -16,18 +16,18 @@
 
 <#include "../init.ftl" />
 
-<#assign instantiableExists = false>
+<#assign instantiableCount = 0>
 
 <#list reports as report>
 	<#if report.isInstantiable()>
-		<#assign instantiableExists = true>
+		<#assign instantiableCount = instantiableCount + 1>
 	</#if>
 </#list>
 
 <@aui["nav-bar"]>
 	<@aui["nav"]>
 		<#if className == campaignClass.getName()>
-			<#if campaignPermission.contains(permissionChecker, classPK?long, actionKeys.UPDATE) && instantiableExists>
+			<#if campaignPermission.contains(permissionChecker, classPK?long, actionKeys.UPDATE) && (instantiableCount > 0)>
 				<@portlet["renderURL"] var="redirectURL">
 					<@portlet["param"] name="mvcPath" value="${contentTargetingPath.EDIT_CAMPAIGN}" />
 					<@portlet["param"] name="backURL" value="${backURL}" />
@@ -37,7 +37,24 @@
 					<@portlet["param"] name="campaignTabs" value="reports" />
 				</@>
 
-				<@aui["nav-item"] dropdown=true iconCssClass="icon-plus" id="addButtonContainer" label='${languageUtil.get(portletConfig, locale, "add")}'>
+				<#if (instantiableCount > 1)>
+					<@aui["nav-item"] dropdown=true iconCssClass="icon-plus" id="addButtonContainer" label='${languageUtil.get(portletConfig, locale, "add")}'>
+						<#list reports as report>
+							<#if report.isInstantiable()>
+								<@portlet["renderURL"] var="addReportURL">
+									<@portlet["param"] name="mvcPath" value="${contentTargetingPath.EDIT_REPORT}" />
+									<@portlet["param"] name="redirect" value="${redirectURL}" />
+									<@portlet["param"] name="campaignId" value="${classPK}" />
+									<@portlet["param"] name="className" value="${campaignClass.getName()}" />
+									<@portlet["param"] name="classPK" value="${classPK}" />
+									<@portlet["param"] name="reportKey" value="${report.getReportKey()}" />
+								</@>
+
+								<@aui["nav-item"] href="${addReportURL}" iconCssClass="${report.getIcon()}" id="add-${report.getReportKey()}" label="${report.getName(locale)}" />
+							</#if>
+						</#list>
+					</@>
+				<#elseif (instantiableCount == 1)>
 					<#list reports as report>
 						<#if report.isInstantiable()>
 							<@portlet["renderURL"] var="addReportURL">
@@ -49,15 +66,19 @@
 								<@portlet["param"] name="reportKey" value="${report.getReportKey()}" />
 							</@>
 
-							<@aui["nav-item"] href="${addReportURL}" iconCssClass="${report.getIcon()}" id="add-${report.getReportKey()}" label="${report.getName(locale)}" />
+							<#assign reportLabel>
+								${languageUtil.get(portletConfig, locale, "add")}&nbsp;${report.getName(locale)}
+							</#assign>
+
+							<@aui["nav-item"] href="${addReportURL}" iconCssClass="icon-plus" id="add-${report.getReportKey()}" label="${reportLabel}" />
 						</#if>
 					</#list>
-				</@>
+				</#if>
 
 				<@aui["nav-item"] cssClass="hide" iconCssClass="icon-remove" id="deleteReports" label='${languageUtil.get(portletConfig, locale, "delete")}' />
 			</#if>
 		<#else>
-			<#if userSegmentPermission.contains(permissionChecker, classPK?long, actionKeys.UPDATE) && instantiableExists>
+			<#if userSegmentPermission.contains(permissionChecker, classPK?long, actionKeys.UPDATE) && (instantiableCount > 0)>
 				<@portlet["renderURL"] var="redirectURL">
 					<@portlet["param"] name="mvcPath" value="${contentTargetingPath.EDIT_USER_SEGMENT}" />
 					<@portlet["param"] name="backURL" value="${redirect}" />
@@ -66,22 +87,43 @@
 					<@portlet["param"] name="classPK" value="${classPK}" />
 				</@>
 
-				<@aui["nav-item"] dropdown=true iconCssClass="icon-plus" id="addButtonContainer" label='${languageUtil.get(portletConfig, locale, "add")}'>
+				<#if (instantiableCount > 1)>
+					<@aui["nav-item"] dropdown=true iconCssClass="icon-plus" id="addButtonContainer" label='${languageUtil.get(portletConfig, locale, "add")}'>
+						<#list reports as report>
+							<#if report.isInstantiable()>
+								<@portlet["renderURL"] var="addReportURL">
+									<@portlet["param"] name="mvcPath" value="${contentTargetingPath.EDIT_REPORT}" />
+									<@portlet["param"] name="redirect" value="${redirectURL}" />
+									<@portlet["param"] name="userSegmentId" value="${classPK}" />
+									<@portlet["param"] name="className" value="${userSegmentClass.getName()}" />
+									<@portlet["param"] name="classPK" value="${classPK}" />
+									<@portlet["param"] name="reportKey" value="${report.getReportKey()}" />
+								</@>
+
+								<@aui["nav-item"] href="${addReportURL}" iconCssClass="${report.getIcon()}" id="add-${report.getReportKey()}" label="${report.getName(locale)}" />
+							</#if>
+						</#list>
+					</@>
+				<#elseif (instantiableCount== 1)>
 					<#list reports as report>
 						<#if report.isInstantiable()>
 							<@portlet["renderURL"] var="addReportURL">
 								<@portlet["param"] name="mvcPath" value="${contentTargetingPath.EDIT_REPORT}" />
 								<@portlet["param"] name="redirect" value="${redirectURL}" />
-								<@portlet["param"] name="userSegmentId" value="${classPK}" />
-								<@portlet["param"] name="className" value="${userSegmentClass.getName()}" />
+								<@portlet["param"] name="campaignId" value="${classPK}" />
+								<@portlet["param"] name="className" value="${campaignClass.getName()}" />
 								<@portlet["param"] name="classPK" value="${classPK}" />
 								<@portlet["param"] name="reportKey" value="${report.getReportKey()}" />
 							</@>
 
-							<@aui["nav-item"] href="${addReportURL}" iconCssClass="${report.getIcon()}" id="add-${report.getReportKey()}" label="${report.getName(locale)}" />
+							<#assign reportLabel>
+								${languageUtil.get(portletConfig, locale, "add")}&nbsp;${report.getName(locale)}
+							</#assign>
+
+							<@aui["nav-item"] href="${addReportURL}" iconCssClass="icon-plus" id="add-${report.getReportKey()}" label="${reportLabel}" />
 						</#if>
 					</#list>
-				</@>
+				</#if>
 
 				<@aui["nav-item"] cssClass="hide" iconCssClass="icon-remove" id="deleteReports" label='${languageUtil.get(portletConfig, locale, "delete")}' />
 			</#if>
