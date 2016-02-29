@@ -82,11 +82,8 @@ public class PageVisitedRule extends BaseRule {
 			anonymousUser.getAnonymousUserId(), Layout.class.getName(), plid,
 			"view");
 
-		if (count > 0) {
-			return true;
-		}
+		return count > 0;
 
-		return false;
 	}
 
 	@Override
@@ -183,6 +180,7 @@ public class PageVisitedRule extends BaseRule {
 
 		try {
 			long liveGroupId = themeDisplay.getSiteGroupIdOrLiveGroupId();
+
 			Layout layout = LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(
 				liveGroupId, privateLayout, friendlyURL);
 
